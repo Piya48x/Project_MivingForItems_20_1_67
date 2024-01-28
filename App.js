@@ -33,6 +33,9 @@ import ProfileComponent from "./Service/Profiles/Profile";
 import AdvanceBooking from "./Service/Profiles/AdvanceBooking";
 import Settings from "./Service/Profiles/Settings";
 import Logout from "./Service/Profiles/Logout";
+import ProfileScreen from "./Customer/Profiles/ProfileScreen";
+import BookingHistoryScreen from "./Customer/Profiles/BookingHistoryScreen";
+import SettingsScreen from "./Customer/Profiles/SettingsScreen";
 
 const Tab = createBottomTabNavigator();
 const Stack = createNativeStackNavigator();
@@ -258,9 +261,9 @@ const App = () => {
           component={DrawerContent}
           options={{ title: "DrawerContent" }}
         />
-        {/* <Stack.Screen
-          name="Profile"
-          component={ProfileComponent}
+        <Stack.Screen
+          name="ProfileScreen"
+          component={ProfileScreen}
           options={{ title: "Profile" }}
         />
         <Stack.Screen
@@ -269,15 +272,15 @@ const App = () => {
           options={{ title: "Profile" }}
         />
         <Stack.Screen
-          name="Settings"
-          component={Settings}
-          options={{ title: "Settings" }}
+          name="BookingHistoryScreen"
+          component={BookingHistoryScreen}
+          options={{ title: "BookingHistoryScreen" }}
         />
         <Stack.Screen
-          name="Logout"
-          component={Logout}
-          options={{ title: "Logout" }}
-        /> */}
+          name="SettingsScreen"
+          component={SettingsScreen}
+          options={{ title: "SettingsScreen" }}
+        />
       </Stack.Navigator>
       
     </NavigationContainer>

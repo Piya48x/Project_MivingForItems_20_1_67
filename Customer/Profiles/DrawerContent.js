@@ -9,10 +9,10 @@ import { auth } from "../../config/firebase";
 import { signOut } from "firebase/auth";
 
 const DrawerList = [
-  { icon: "home-outline", label: "Home", navigateTo: "Home" },
-  { icon: "account-multiple", label: "Profile", navigateTo: "Profile" },
-  { icon: "account-group", label: "User", navigateTo: "User" },
-  { icon: "bookshelf", label: "Library", navigateTo: "" },
+  { icon: "home-outline", label: "Home", navigateTo: "MainCustomer" },
+  { icon: "account-multiple", label: "Profile", navigateTo: "ProfileScreen" },
+  { icon: "clock", label: "Booking History", navigateTo: "BookingHistoryScreen" },
+  { icon: "cog", label: "Settings", navigateTo: "SettingsScreen" },
 ];
 
 const DrawerLayout = ({ icon, label, navigateTo }) => {
@@ -45,7 +45,7 @@ const DrawerItems = (props) => {
 function DrawerContent(props) {
   const navigation = useNavigation();
   const [userName, setUserName] = useState("");
-  
+
   const handleLogout = async () => {
     try {
       await signOut(auth); // ทำการออกจากระบบ
@@ -56,7 +56,7 @@ function DrawerContent(props) {
       console.error("Logout error:", error); // พิมพ์ข้อผิดพลาด (ถ้ามี)
     }
   };
- 
+
   const fetchUserProfileData = async () => {
     const currentUser = auth.currentUser;
     if (currentUser) {
@@ -71,7 +71,7 @@ function DrawerContent(props) {
   useEffect(() => {
     fetchUserProfileData();
   }, []);
-  
+
   const currentUser = auth.currentUser;
 
   return (
@@ -87,7 +87,7 @@ function DrawerContent(props) {
                   style={{ marginTop: 5 }}
                 />
                 <View style={{ marginLeft: 10, flexDirection: "column" }}>
-                <Title style={styles.title}>{userName}</Title>
+                  <Title style={styles.title}>{userName}</Title>
                   <Text style={styles.caption} numberOfLines={1}>
                     {currentUser.email}
                   </Text>

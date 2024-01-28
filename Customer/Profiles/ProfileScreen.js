@@ -1,12 +1,65 @@
-import { View, Text } from 'react-native'
-import React from 'react'
+import React, { useState, useEffect } from 'react';
+import { View, Text, Image, StyleSheet } from 'react-native';
+import { auth } from '../../config/firebase';
 
-const ProfileScreen = () => {
+const Profile = ({ user }) => {
+  const [userName, setUserName] = useState('');
+
+  const fetchUserProfileData = async () => {
+    const currentUser = auth.currentUser;
+    if (currentUser) {
+      setUserName(currentUser.displayName || "DefaultUsername");
+    }
+  };
+
+  useEffect(() => {
+    fetchUserProfileData();
+  }, []);
+
+  useEffect(() => {
+    fetchUserProfileData();
+  }, []);
+  const currentUser = auth.currentUser;
+ 
+
   return (
-    <View>
-      <Text>ProfileScreen</Text>
+    <View style={styles.container}>
+      <View style={styles.profileContainer}>
+        <Image
+          style={styles.profileImage}
+          source={require('../../assets/profile-screen-bg.png')}
+        />
+        <Text style={styles.profileName}>{userName || 'John Doe'}</Text>
+        <Text style={styles.profileEmail}> {currentUser.email || 'john.doe@example.com'}</Text>
+      </View>
     </View>
-  )
-}
+  );
+};
 
-export default ProfileScreen
+const styles = StyleSheet.create({
+  container: {
+    flex: 1,
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+  profileContainer: {
+    alignItems: 'center',
+  },
+  profileImage: {
+    width: 150,
+    height: 150,
+    borderRadius: 75,
+  },
+  profileName: {
+    fontSize: 18,
+    fontWeight: 'bold',
+    marginTop: 10,
+  },
+  profileEmail: {
+    fontSize: 14,
+    color: '#666',
+    marginTop: 5,
+  },
+});
+
+export default Profile;
