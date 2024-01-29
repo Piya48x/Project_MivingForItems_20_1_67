@@ -235,7 +235,6 @@ const CustomerList = ({ route }) => {
           selectedVehicleType,
           selectedDateTime: selectedDateTimeString, // ส่ง selectedDateTimeString แทน selectedDateTime
           orderNumber,
-          reservationStatus,
         };
     
         socket.emit("sendOrder", orderData);

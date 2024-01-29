@@ -20,7 +20,7 @@ import * as Animatable from "react-native-animatable";
 import { Audio } from "expo-av";
 import * as Notifications from "expo-notifications";
 import * as Haptics from "expo-haptics";
-import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
+import { auth } from "../config/firebase";
 
 const EnterOrder = () => {
   const mapRef = useRef(null);
@@ -217,18 +217,21 @@ const EnterOrder = () => {
   const handleAcceptOrder = () => {
     handleDirections(order);
   };
-  const handlFeedblack = () => {
-    if (socket && order && isAcceptingOrders) {
-      // User confirmed, proceed with acceptance
-      socket.emit("acceptOrder", { orderId: order.id });
+  const handlFeedblack = (order) => {
+    if (socket && order) {
+      socket.emit('acceptOrder', {
+        orderId: order.id,
+        driverName: userName,
+        driverEmail: currentUser.email,
+      });
       Alert.alert("ยอมรับคำสั่ง", "คุณได้ยอมรับคำสั่งแล้ว!");
       setIsOrderAccepted(true);
-
+  
       // Clear the reset flag if it was set (countdown was not 0)
       if (resetScreen) {
         setResetScreen(false);
       }
-
+  
       // Set the ref to true when handlFeedblack is pressed
       isHandlFeedblackPressedRef.current = true;
     }
@@ -276,6 +279,24 @@ const EnterOrder = () => {
     }
   };
 
+  const [userName, setUserName] = useState("");
+
+  const fetchUserProfileData = async () => {
+    const currentUser = auth.currentUser;
+    if (currentUser) {
+      setUserName(currentUser.displayName || "DefaultUsername");
+    }
+  };
+
+  useEffect(() => {
+    fetchUserProfileData();
+  }, []);
+
+  useEffect(() => {
+    fetchUserProfileData();
+  }, []);
+  const currentUser = auth.currentUser;
+
   const handleCompleteOrder = () => {
     if (socket && order) {
       Alert.alert(
@@ -320,7 +341,14 @@ const EnterOrder = () => {
     playSound();
   };
 
-  const handleDirections = (order) => {
+  const handleDirections = (order, driverName, driverEmail) => {
+    if (socket && order) {
+      socket.emit('acceptOrder', {
+        orderId: order.id,
+        driverName,
+        driverEmail,
+      });
+    }
     // แสดงเส้นทางใน Google Maps
     showDirections(order.pickupLocation, order.dropoffLocation);
   };
@@ -348,6 +376,8 @@ const EnterOrder = () => {
       >
         <View style={styles.container}>
           <Text style={styles.heading}>สรุปรายการขนส่ง</Text>
+          <Text style={styles.profileName}>{userName}</Text>
+        <Text style={styles.profileEmail}> {currentUser.email}</Text>
           <MapView
             ref={mapRef}
             style={styles.map}
